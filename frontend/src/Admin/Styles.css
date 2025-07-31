@@ -1,0 +1,153 @@
+/* Navbar Background */
+.custom-navbar {
+  background-color: #076cea !important;
+  border-bottom: 2px solid black;
+}
+
+/* Logo Styling */
+.logo-style {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: transparent;
+  background: linear-gradient(to right, black, black);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Admin User Info Alignment */
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Badge Styling */
+.admin-badge {
+  background-color: #ffffff;
+  color: #000;
+  font-size: 1.05rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Logout Button Styling */
+.logout-btn {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Sidebar */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-link:hover {
+  background-color: #f1f1f1;
+}
+
+.sidebar-link.active {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+/* Layout Container */
+.layout-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 12%;
+  background-color: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar-header {
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #444;
+}
+
+.sidebar-nav {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.sidebar-link .icon {
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
+
+.active1 {
+  color: black;
+  font-weight: bold;
+  background-color: #dee2e6;
+}
+
+/* Main Content */
+.main-content {
+  width: 100%;
+  padding-top: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-y: auto;
+}
+
+/* View Container */
+.view-container {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.view-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-user-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .admin-badge {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .logout-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}

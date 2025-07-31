@@ -1,0 +1,38 @@
+.view-receptionist-container {
+  max-width: 85%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f4f4f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.receptionist-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.receptionist-table th,
+.receptionist-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #000000;
+}
+
+.receptionist-table th {
+  background-color: #efe6a6;
+}
+
+.receptionist-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.receptionist-table tr:hover {
+  background-color: #f1f1f1;
+}
