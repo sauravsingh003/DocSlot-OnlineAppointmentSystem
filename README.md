@@ -72,7 +72,7 @@ It features **real-time doctor availability**, secure appointment management, an
 ---
 
 ### 🔧 Backend Setup
-
+```bash
 # Clone the repository
 git clone https://github.com/your-username/docslot.git
 cd docslot/backend
@@ -118,4 +118,4 @@ We welcome all contributions!
 If you'd like to fix a bug or add a feature, feel free to fork the repository and submit a pull request.
 Don't forget to ⭐ the repo if you like it!
 
-<p align="center"> Made with ❤️ for better and smarter healthcare. </p> 
+<p align="center"> Made with ❤️ for better and smarter healthcare. </p>```
