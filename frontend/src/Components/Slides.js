@@ -1,7 +1,8 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
+import { Typewriter } from "react-simple-typewriter";
 import "react-toastify/dist/ReactToastify.css";
-import "./Slides.css"; // Don't forget to import your CSS file
+import "./Slides.css";
 
 function Slides() {
   return (
@@ -27,8 +28,19 @@ function Slides() {
         <div className="slides-text-content">
           <h1 className="slides-heading">Welcome to DocSlot</h1>
           <h2 className="slides-subheading">
-            Book your appointment with trusted doctors —<br />
-            anytime, anywhere.
+            <Typewriter
+              words={[
+                "Book your appointment with trusted doctors — anytime, anywhere.",
+                "Real-time doctor availability and secure scheduling.",
+                "Hassle-free appointment booking for patients & doctors.",
+              ]}
+              loop={0}
+              cursor
+              cursorStyle="|"
+              typeSpeed={40}
+              deleteSpeed={30}
+              delaySpeed={2000}
+            />
           </h2>
         </div>
       </div>

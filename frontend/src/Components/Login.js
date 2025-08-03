@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Navbar from "./Navbar";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate, Link } from "react-router-dom"; // Import Link for navigation
+import { useNavigate, Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import CustomerNavbar from "./CustomerNavbar";
 
 function Login() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -21,100 +26,110 @@ function Login() {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
+      setLoading(true);
       try {
-        // Perform login API call
         const response = await axios.post("http://localhost:8080/login", values);
-        toast.success("Login Successful!", {
-          position: "top-center",
-          autoClose: 1000,
-        });
+        toast.success("Login Successful!", { position: "top-right", autoClose: 1500 });
 
         const user = response.data;
-
-        // Store user data and token in sessionStorage
         sessionStorage.setItem("userName", user.authenticatedDetails.principal.name);
         sessionStorage.setItem("userId", user.authenticatedDetails.principal.id);
         sessionStorage.setItem("userRole", user.authenticatedDetails.principal.role);
         sessionStorage.setItem("jwtToken", user.jwt);
 
-        console.log(sessionStorage.getItem("jwtToken"));
-
-        // Navigate based on role
-        if (user.authenticatedDetails.principal.role === "ROLE_PATIENT") navigate("/");
-        else if (user.authenticatedDetails.principal.role === "ROLE_ADMIN") navigate("/admin");
-        else if (user.authenticatedDetails.principal.role === "ROLE_DOCTOR") navigate("/doctor");
-        else if (user.authenticatedDetails.principal.role === "ROLE_RECEPTIONIST") navigate("/receiptionist");
+        const role = user.authenticatedDetails.principal.role;
+        if (role === "ROLE_PATIENT") navigate("/");
+        else if (role === "ROLE_ADMIN") navigate("/admin");
+        else if (role === "ROLE_DOCTOR") navigate("/doctor");
+        else if (role === "ROLE_RECEPTIONIST") navigate("/receiptionist");
       } catch (error) {
-        toast.error("Invalid email or password!", {
-          position: "top-center",
-          autoClose: 1000,
-        });
+        toast.error("Invalid email or password!", { position: "top-right", autoClose: 1500 });
+      } finally {
+        setLoading(false);
       }
     },
   });
 
   return (
-    <div
-      style={{ backgroundColor: "white", color: "white", minHeight: "100vh" }}
-    >
-      <CustomerNavbar/>
+    <div style={{ backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
+      <CustomerNavbar />
       <ToastContainer />
-      <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
         <div
-          className="shadow-lg p-4"
+          className="card p-4 shadow-lg"
           style={{
-            width: "30rem",
-            backgroundColor: "white",
-            border: "3px solid #076cea",
-            color: "black",
-            display: "flex",
-            flexDirection: "column",
+            maxWidth: "420px",
+            width: "100%",
+            borderRadius: "1rem",
+            backgroundColor: "#ffffff",
+            border: "1px solid #dee2e6",
           }}
         >
-          <h2 className="text-center mb-4">Login</h2>
+          <h3 className="text-center text-primary fw-bold mb-4">Login</h3>
           <form onSubmit={formik.handleSubmit}>
-            {/* Email Input */}
+            {/* Email Field with Icon */}
             <div className="mb-3">
-              <label>Email:</label>
-              <input
-                type="email"
-                {...formik.getFieldProps("email")}
-                className="form-control"
-              />
+              <label htmlFor="email" className="form-label fw-semibold">Email</label>
+              <div className="input-group">
+                <span className="input-group-text bg-light">
+                  <i className="fas fa-envelope"></i>
+                </span>
+                <input
+                  id="email"
+                  type="email"
+                  {...formik.getFieldProps("email")}
+                  className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+                  placeholder="Enter your email"
+                />
+              </div>
               {formik.touched.email && formik.errors.email && (
-                <div className="text-danger">{formik.errors.email}</div>
+                <div className="invalid-feedback d-block">{formik.errors.email}</div>
               )}
             </div>
 
-            {/* Password Input */}
+            {/* Password Field with Eye Icon */}
             <div className="mb-3">
-              <label>Password:</label>
-              <input
-                type="password"
-                {...formik.getFieldProps("password")}
-                className="form-control"
-              />
+              <label htmlFor="password" className="form-label fw-semibold">Password</label>
+              <div className="input-group">
+                <span className="input-group-text bg-light">
+                  <i className="fas fa-lock"></i>
+                </span>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...formik.getFieldProps("password")}
+                  className={`form-control ${formik.touched.password && formik.errors.password ? "is-invalid" : ""}`}
+                  placeholder="Enter your password"
+                />
+                <span className="input-group-text bg-light" onClick={togglePassword} style={{ cursor: "pointer" }}>
+                  <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                </span>
+              </div>
               {formik.touched.password && formik.errors.password && (
-                <div className="text-danger">{formik.errors.password}</div>
+                <div className="invalid-feedback d-block">{formik.errors.password}</div>
               )}
             </div>
 
-            <div className="mb-3 w-100">
-              <button
-                type="submit"
-                className="btn btn-light w-100 mt-3"
-                style={{ backgroundColor: "#076cea" }}
-              >
-                Login
+            {/* Submit Button with Spinner */}
+            <div className="d-grid mt-4">
+              <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>
 
-          {/* Link to Register Page */}
-          <div className="mt-3 text-center">
-            <p>Don't have an account?</p>
-            <Link to="/register" style={{ textDecoration: "none", color: "#076cea" }}>
-              <strong>Register here</strong>
+          {/* Register Link */}
+          <div className="text-center mt-4">
+            <p className="mb-0">Don't have an account?</p>
+            <Link to="/register" className="text-decoration-none text-primary fw-semibold">
+              Register here
             </Link>
           </div>
         </div>

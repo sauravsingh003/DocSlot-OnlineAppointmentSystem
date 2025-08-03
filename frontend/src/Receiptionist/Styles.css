@@ -1,116 +1,182 @@
+/* ---------------------------------- */
+/* NAVBAR */
+.custom-navbar {
+  background: linear-gradient(90deg, #0056b3, #076cea) !important;
+  border-bottom: 2px solid #003f8a;
+}
+
+/* Logo */
 .logo-style {
-  font-family: 'sans-serif'; /* Use a clean sans-serif font */
-  font-size: 2rem; /* Adjust size as needed */
-  font-weight: 600; /* Semi-bold weight */
-  letter-spacing: 0.2em; /* Add letter spacing */
-  text-transform: uppercase; /* Make text uppercase */
-  color: transparent;
-  background: linear-gradient(to right,black,black); /* Light to dark gray gradient */
-  -webkit-background-clip: text; /* Clip background to text */
-  background-clip: text;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: white;
 }
 
-  .sidebar-link {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    text-decoration: none;
-    color: white;
-    transition: background-color 0.3s ease;
+/* Admin badge (reused) */
+.admin-badge {
+  background: #fff;
+  color: #333;
+  padding: 0.45rem 0.9rem;
+  border-radius: 25px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 1rem;
 }
 
-.sidebar-link:hover {
-    background-color: white;
+/* Logout button */
+.logout-btn {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.sidebar-link.active {
-    background-color: white; /* Change this to the color you want */
-    color:#000;
-}
-
-/* Main Layout */
+/* ---------------------------------- */
+/* LAYOUT */
 .layout-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #f2f6fc;
 }
 
-/* Sidebar: 25% */
+/* ---------------------------------- */
+/* SIDEBAR */
 .sidebar {
-  width: 12%;
-  background-color: white;
-  color: black;
+  min-width: 240px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  flex-direction: column;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease-in-out;
+  z-index: 1030;
+  display: flex;
+  overflow: hidden; /* Prevent overflow */
+}
+
+.sidebar-header {
+  font-size: 1.4rem;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #076cea;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #076cea;
+  padding-bottom: 0.4rem;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+}
+
+.sidebar-nav {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Sidebar Header */
-.sidebar-header {
-  padding: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  border-bottom: 1px solid #44474a;
-}
-
-/* Sidebar Links */
-.sidebar-nav {
-  width: 100%;
-  margin-top: 20px;
-}
-
+/* Sidebar links */
 .sidebar-link {
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
-  padding: 15px 20px;
   text-decoration: none;
-  color: rgb(0, 0, 0);
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease;
-}
-
-.sidebar-link:hover {
-  background-color: white;
+  color: #333;
+  border-radius: 12px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease-in-out;
 }
 
 .sidebar-link .icon {
   margin-right: 10px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  color: #076cea;
 }
 
-.active1 {
-  color: black;
-  font-weight: bold;
-  background-color: #34495e;
+.sidebar-link:hover {
+  background-color: #e8f0ff;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+  transform: translateX(4px);
 }
 
+.sidebar-link.active {
+  background-color: #d6e9ff;
+  color: #003f8a;
+  font-weight: 700;
+  border-left: 4px solid #076cea;
+}
+
+/* Toggle for mobile */
+.sidebar-toggle {
+  position: fixed;
+  top: 74px;
+  left: 16px;
+  z-index: 1050;
+  background: #076cea;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  box-shadow: 0 0 8px rgba(0,102,255,0.3);
+  display: none;
+}
+
+/* ---------------------------------- */
+/* MAIN CONTENT */
 .main-content {
-  width: 100%;
-  padding-top: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  box-shadow: -3px 0 10px rgba(0,0,0,0.03);
   overflow-y: auto;
 }
 
-/* ViewCustomer Content Styling */
-.view-container {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+/* ---------------------------------- */
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    height: calc(100vh - 70px);
+    width: 220px;
+    display: none;
+    animation: slideIn 0.3s ease-in-out;
+  }
+  .sidebar.d-block {
+    display: flex !important;
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .main-content {
+    padding: 1.2rem;
+    border-radius: 0;
+  }
 }
 
-.text-center {
-  text-align: center;
-  margin-bottom: 20px;
+/* Slide animation */
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
 }
-.view-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-
-
-
-

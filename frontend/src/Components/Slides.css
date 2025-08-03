@@ -127,6 +127,21 @@
   }
 
   .slides-subheading {
-    font-size: 1.1rem;
+    font-size: 1.7rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    min-height: 70px; /* Prevent layout shift during typing */
+    white-space: pre-wrap;
   }
+  
+  @media (max-width: 576px) {
+    .slides-subheading {
+      font-size: 1rem;
+      min-height: 50px;
+    }
+  }
+  
 }

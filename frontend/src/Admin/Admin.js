@@ -1,52 +1,57 @@
-import React from "react";
-import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { FaUserMd, FaUserTie, FaHospitalSymbol, FaStethoscope, FaClipboardList } from "react-icons/fa";  
-
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  FaUserMd,
+  FaUserTie,
+  FaHospitalSymbol,
+  FaStethoscope,
+  FaClipboardList,
+  FaBars,
+} from "react-icons/fa";
 import AdminNavbar from "./AdminNavbar";
 import "./Styles.css";
 
 function Admin({ children }) {
   const navigate = useNavigate();
+  const [showSidebar, setShowSidebar] = useState(false);
 
-      useEffect(() => {
-        if (!sessionStorage.getItem("userName")) {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
-          navigate("/doctor");
-        } else if (sessionStorage.getItem("userRole") === "PATIENT") {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "ADMIN") {
-          navigate("/admin");
-        }
-        else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
-          navigate("/receiptionist");
-        }
-      }, [navigate]);
+  useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
+    if (!sessionStorage.getItem("userName")) {
+      navigate("/");
+    } else if (role === "DOCTOR") {
+      navigate("/doctor");
+    } else if (role === "PATIENT") {
+      navigate("/");
+    } else if (role === "RECEPTIONIST") {
+      navigate("/receiptionist");
+    }
+  }, [navigate]);
 
   return (
-    <div>
+    <>
       <AdminNavbar />
       <div className="layout-container">
-        <div
-          className="sidebar"
-          style={{
-            border: "2px solid black",
-            display: "flex",
-            backgroundColor: "#076cea",
-          }}
+        {/* Sidebar Toggle Button (visible only on small screens) */}
+        <button
+          className="btn btn-outline-light d-md-none sidebar-toggle"
+          onClick={() => setShowSidebar(!showSidebar)}
         >
-          <div className="sidebar-header">
-            <h3>Admin</h3>
-          </div>
+          <FaBars /> Menu
+        </button>
+
+        {/* Sidebar */}
+        <div
+          className={`sidebar bg-light ${showSidebar ? "d-block" : "d-none"} d-md-flex`}
+        >
+          <div className="sidebar-header">Admin</div>
           <nav className="sidebar-nav">
-           
             <NavLink
               to="/admin/addSpeciality"
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaHospitalSymbol className="icon" /> Add Speciality
             </NavLink>
@@ -55,6 +60,7 @@ function Admin({ children }) {
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaUserMd className="icon" /> Add Doctor
             </NavLink>
@@ -63,6 +69,7 @@ function Admin({ children }) {
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaUserTie className="icon" /> Add Receptionist
             </NavLink>
@@ -71,6 +78,7 @@ function Admin({ children }) {
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaStethoscope className="icon" /> View Doctors
             </NavLink>
@@ -79,15 +87,17 @@ function Admin({ children }) {
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaClipboardList className="icon" /> View Receptionist
             </NavLink>
           </nav>
         </div>
 
+        {/* Main Content */}
         <div className="main-content">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 

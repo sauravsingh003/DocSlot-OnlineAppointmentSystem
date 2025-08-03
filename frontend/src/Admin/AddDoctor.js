@@ -13,21 +13,22 @@ function AddDoctor() {
   const [specializations, setSpecializations] = useState([]);
   const [specializationId, setSpecializationId] = useState("");
   const [password, setPassword] = useState("");
-  const [amount, setAmount] = useState(""); // Added amount state
+  const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+
   useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
     if (!sessionStorage.getItem("userName")) {
       navigate("/");
-    } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
+    } else if (role === "DOCTOR") {
       navigate("/doctor");
-    } else if (sessionStorage.getItem("userRole") === "PATIENT") {
+    } else if (role === "PATIENT") {
       navigate("/");
-    } else if (sessionStorage.getItem("userRole") === "ADMIN") {
+    } else if (role === "ADMIN") {
       navigate("/admin");
-    }
-    else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
+    } else if (role === "RECEPTIONIST") {
       navigate("/receiptionist");
     }
   }, [navigate]);
@@ -70,7 +71,7 @@ function AddDoctor() {
     formData.append("specializationId", specializationId);
     formData.append("doctorImage", doctorImage);
     formData.append("password", password);
-    formData.append("amount", amount); // Added amount parameter
+    formData.append("amount", amount);
 
     try {
       const config = {
@@ -91,7 +92,7 @@ function AddDoctor() {
         setSpecializationId("");
         setDoctorImage(null);
         setPassword("");
-        setAmount(""); // Reset amount field
+        setAmount("");
         setError("");
         window.location.reload();
       } else {
@@ -107,7 +108,8 @@ function AddDoctor() {
     <Admin>
       <div className="add-doctor-container">
         <h3>Add New Doctor</h3>
-        <form onSubmit={handleSubmit} className="doctor-form">
+        {/* ✅ FIXED: added enctype for file upload */}
+        <form onSubmit={handleSubmit} className="doctor-form" encType="multipart/form-data">
           <div className="form-group">
             <label>Doctor Name</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -144,7 +146,7 @@ function AddDoctor() {
           </div>
 
           <div className="form-group">
-            <label>Amount</label> {/* Added amount input field */}
+            <label>Amount</label>
             <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
           </div>
 
@@ -152,8 +154,6 @@ function AddDoctor() {
             <label>Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
-
-         
 
           {error && <p className="error-message">{error}</p>}
 

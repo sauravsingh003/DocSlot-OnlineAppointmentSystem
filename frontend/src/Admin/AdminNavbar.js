@@ -1,9 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
-import { Navbar, Container, Nav, Badge, Button } from 'react-bootstrap';
-import { FaHome, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Styles.css";
 
@@ -12,45 +11,38 @@ function AdminNavbar() {
 
   const handleLogout = () => {
     sessionStorage.clear();
+    toast.success("Logged out successfully");
     navigate('/');
   };
 
   return (
-    <div>
-      <Navbar
-        variant="dark"
-        expand="lg"
-        className="px-5 custom-navbar"
-      >
+    <>
+      <Navbar variant="dark" expand="lg" className="px-4 custom-navbar">
         <Container fluid>
-          <Navbar.Brand as={NavLink} to="/admin" className="d-flex align-items-center text-decoration-none">
-            <span className="logo-style text-white">
-              DocSlot
-            </span>
+          <Navbar.Brand as={NavLink} to="/admin" className="text-white fw-bold">
+            DocSlot
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="navbar-nav" />
           <Navbar.Collapse id="navbar-nav">
-            <Nav className="ms-auto d-flex align-items-center gap-3">
-              <Nav.Item className="admin-user-info">
-                <span className="admin-badge">
-                  <FaUserCircle />
-                  {sessionStorage.getItem("userName")}
-                </span>
-                <Button
-                  variant="danger"
-                  className="logout-btn"
-                  onClick={handleLogout}
-                >
-                  <FaSignOutAlt /> Logout
-                </Button>
-              </Nav.Item>
+            <Nav className="ms-auto align-items-center gap-3">
+              <span className="admin-badge">
+                <FaUserCircle />
+                {sessionStorage.getItem("userName")}
+              </span>
+              <Button
+                variant="danger"
+                className="logout-btn"
+                onClick={handleLogout}
+              >
+                <FaSignOutAlt /> Logout
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <ToastContainer />
-    </div>
+    </>
   );
 }
 

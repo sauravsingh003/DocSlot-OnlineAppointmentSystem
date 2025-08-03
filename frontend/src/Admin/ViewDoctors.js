@@ -7,20 +7,20 @@ import Admin from "./Admin";
 function ViewDoctors() {
   const [doctors, setDoctors] = useState([]);
   const navigate = useNavigate();
-      useEffect(() => {
-        if (!sessionStorage.getItem("userName")) {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
-          navigate("/doctor");
-        } else if (sessionStorage.getItem("userRole") === "PATIENT") {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "ADMIN") {
-          navigate("/admin");
-        }
-        else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
-          navigate("/receiptionist");
-        }
-      }, [navigate]);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("userName")) {
+      navigate("/");
+    } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
+      navigate("/doctor");
+    } else if (sessionStorage.getItem("userRole") === "PATIENT") {
+      navigate("/");
+    } else if (sessionStorage.getItem("userRole") === "ADMIN") {
+      navigate("/admin");
+    } else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
+      navigate("/receiptionist");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -30,7 +30,6 @@ function ViewDoctors() {
             Authorization: `Bearer ${sessionStorage.getItem("jwtToken")}`,
           },
         };
-
         const response = await axios.get("http://localhost:8080/admin/getAllDoctors", config);
         setDoctors(response.data);
       } catch (error) {
@@ -53,47 +52,40 @@ function ViewDoctors() {
     <Admin>
       <div className="view-doctors-container">
         <h3>View Doctors</h3>
-        <table className="doctor-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th>Phone</th>
-              <th>Degree</th>
-              <th>Amount</th>
-              <th>Specialization</th>
-              {/* <th>Action</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {doctors.length > 0 ? (
-              doctors.map((doctor) => (
-                <tr key={doctor.email}>
-                  <td>{doctor.name}</td>
-                  <td>{doctor.email}</td>
-                  <td>{doctor.password}</td>
-                  <td>{doctor.phone}</td>
-                  <td>{doctor.degree}</td>
-                  <td>{doctor.amount}</td>
-                  <td>{doctor.specializationName}</td>
-                  {/* <td>
-                    <button 
-                      className="edit-btn" 
-                      onClick={() => handleEdit(doctor.id)}
-                    >
-                      Edit
-                    </button>
-                  </td> */}
-                </tr>
-              ))
-            ) : (
+        <div className="table-responsive">
+          <table className="doctor-table">
+            <thead>
               <tr>
-                <td colSpan="8">No doctors available</td>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Phone</th>
+                <th>Degree</th>
+                <th>Amount</th>
+                <th>Specialization</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {doctors.length > 0 ? (
+                doctors.map((doctor) => (
+                  <tr key={doctor.email}>
+                    <td>{doctor.name}</td>
+                    <td>{doctor.email}</td>
+                    <td>{doctor.password}</td>
+                    <td>{doctor.phone}</td>
+                    <td>{doctor.degree}</td>
+                    <td>{doctor.amount}</td>
+                    <td>{doctor.specializationName}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7">No doctors available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </Admin>
   );

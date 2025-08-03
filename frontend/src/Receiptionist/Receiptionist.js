@@ -1,66 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { FaUserPlus, FaUsers } from "react-icons/fa";  
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaUserPlus, FaUsers, FaBars } from "react-icons/fa";
 
 import ReceiptionistNavbar from "./ReceiptionistNavbar";
 import "./Styles.css";
 
 function Receiptionist({ children }) {
   const navigate = useNavigate();
-        useEffect(() => {
-          if (!sessionStorage.getItem("userName")) {
-            navigate("/");
-          } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
-            navigate("/doctor");
-          } else if (sessionStorage.getItem("userRole") === "PATIENT") {
-            navigate("/");
-          } else if (sessionStorage.getItem("userRole") === "ADMIN") {
-            navigate("/admin");
-          }
-          else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
-            navigate("/receiptionist");
-          }
-        }, [navigate]);
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
+    if (!sessionStorage.getItem("userName")) {
+      navigate("/");
+    } else if (role === "DOCTOR") {
+      navigate("/doctor");
+    } else if (role === "PATIENT") {
+      navigate("/");
+    } else if (role === "ADMIN") {
+      navigate("/admin");
+    } else if (role === "RECEPTIONIST") {
+      navigate("/receiptionist");
+    }
+  }, [navigate]);
+
   return (
-    <div>
+    <>
       <ReceiptionistNavbar />
       <div className="layout-container">
-        <div
-          className="sidebar"
-          style={{
-            border: "2px solid black",
-            display: "flex",
-            backgroundColor: "#076cea",
-          }}
+        {/* Toggle for mobile */}
+        <button
+          className="sidebar-toggle"
+          onClick={() => setShowSidebar(!showSidebar)}
         >
-          <div className="sidebar-header">
-            <h3>Receptionist</h3>
-          </div>
+          <FaBars /> Menu
+        </button>
+
+        {/* Sidebar */}
+        <div
+          className={`sidebar ${showSidebar ? "d-block" : "d-none"} d-md-flex`}
+        >
+          <div className="sidebar-header">Receptionist</div>
           <nav className="sidebar-nav">
             <NavLink
               to="/receiptionist/addPatient"
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaUserPlus className="icon" /> Add Patient
             </NavLink>
-
             <NavLink
               to="/receiptionist/viewPatients"
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setShowSidebar(false)}
             >
               <FaUsers className="icon" /> View Patients
             </NavLink>
           </nav>
         </div>
 
+        {/* Main content */}
         <div className="main-content">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 

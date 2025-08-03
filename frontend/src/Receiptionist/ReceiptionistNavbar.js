@@ -1,62 +1,47 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
-import { Navbar, Container, Nav, Badge, Button } from 'react-bootstrap';
-import { FaHome, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import { Navbar, Container, Nav, Button, Badge } from "react-bootstrap";
+import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Styles.css";
+
 function ReceiptionistNavbar() {
-    const navigate = useNavigate(); 
-    
-
-    const handleLogout = () => {
-        sessionStorage.clear();
-        navigate('/');
-
-      };
-      
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    sessionStorage.clear();
+    toast.success("Logged out successfully");
+    navigate("/");
+  };
 
   return (
-    <div>
-      <Navbar variant="dark" expand="lg" className="px-5" style={{ border: '2px solid black',backgroundColor:"#076cea" }}>
+    <>
+      <Navbar variant="dark" expand="lg" className="custom-navbar px-4">
         <Container fluid>
-        <Navbar.Brand as={NavLink} to="/receiptionist" className="d-flex align-items-center text-decoration-none">
-        <span className="logo-style">
-          Nexacare
-        </span>
-      </Navbar.Brand>
-          <Navbar.Collapse id="navbar-nav">
-            <Nav className="ms-auto d-flex justify-content-between w-100">
-              <Nav.Item>
-                <NavLink
-                  to="/receiptionist"
-                  className="nav-link fs-4 text-white fw-semibold"
-                >
-                 
-                </NavLink>
-              </Nav.Item>
-              <Nav.Item className="d-flex align-items-center">
-                <Badge bg="light" className="fs-5 text-dark fw-semibold">
-                  <FaUserCircle /> 
-                  {sessionStorage.getItem("userName")}
-                </Badge>
-                <Button
-                  variant="danger"
-                  className="ms-3"
-                  onClick={handleLogout}
-                >
-                  <FaSignOutAlt /> Logout
-                </Button>
-              </Nav.Item>
+          <Navbar.Brand
+            as={NavLink}
+            to="/receiptionist"
+            className="d-flex align-items-center text-white"
+          >
+            <span className="logo-style" style={{ color: "white" }}>DOCSLOT</span>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="recep-nav" />
+          <Navbar.Collapse id="recep-nav">
+            <Nav className="ms-auto align-items-center gap-3">
+              <Badge bg="light" className="admin-badge">
+                <FaUserCircle />
+                {sessionStorage.getItem("userName")}
+              </Badge>
+              <Button variant="danger" className="logout-btn" onClick={handleLogout}>
+                <FaSignOutAlt /> Logout
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
       <ToastContainer />
-    </div>
-  )
+    </>
+  );
 }
 
 export default ReceiptionistNavbar;

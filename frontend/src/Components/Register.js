@@ -9,6 +9,10 @@ import CustomerNavbar from "./CustomerNavbar";
 
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => setShowPassword((prev) => !prev);
 
   const formik = useFormik({
     initialValues: {
@@ -21,94 +25,77 @@ function Register() {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      age: Yup.number()
-        .positive("Age must be positive")
-        .integer("Age must be a whole number")
-        .required("Age is required"),
+      age: Yup.number().positive("Must be positive").integer("Must be a number").required("Age is required"),
       gender: Yup.string().oneOf(["Male", "Female", "Other"]).required("Gender is required"),
-      weight: Yup.number()
-        .positive("Weight must be positive")
-        .required("Weight is required"),
+      weight: Yup.number().positive("Must be positive").required("Weight is required"),
       email: Yup.string().email("Invalid email").required("Email is required"),
-      password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
+      password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
     }),
-    onSubmit: (values) => {
-      // Prepare the user data
-      const userData = {
-        name: values.name,
-        age: values.age,
-        gender: values.gender,
-        weight: values.weight,
-        email: values.email,
-        password: values.password,
-      };
-
-      // Make the API call to save the data
-      axios
-        .post("http://localhost:8080/patient/registerPatient", userData) // Your backend URL
-        .then((response) => {
-          toast.success("Registration successful!");
-          navigate("/login"); // Redirect to the login page after successful registration
-        })
-        .catch((error) => {
-          toast.error("Error registering user. Please try again.");
-        });
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        const response = await axios.post("http://localhost:8080/patient/registerPatient", values);
+        toast.success("Registration successful!", { position: "top-right", autoClose: 1500 });
+        navigate("/login");
+      } catch (error) {
+        toast.error("Registration failed. Please try again.", { position: "top-right", autoClose: 1500 });
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
   return (
-    <div style={{ backgroundColor: "white", color: "black", minHeight: "80vh" }}>
+    <div style={{ backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
       <CustomerNavbar />
       <ToastContainer />
-      <div className="d-flex justify-content-center align-items-center vh-40 mt-5">
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
         <div
-          className="shadow-lg p-4"
+          className="card p-4 shadow-lg"
           style={{
-            width: "35rem",
-            backgroundColor: "white",
-            color: "black",
-            display: "flex",
-            flexDirection: "column",
-            border: "3px solid #076cea",
+            maxWidth: "500px",
+            width: "100%",
+            borderRadius: "1rem",
+            backgroundColor: "#ffffff",
+            border: "1px solid #dee2e6",
           }}
         >
-          <h3 className="text-center mb-2">Register</h3>
+          <h3 className="text-center text-primary fw-bold mb-4">Register</h3>
           <form onSubmit={formik.handleSubmit}>
-            {/* Name Input */}
+            {/* Name */}
             <div className="mb-3">
-              <label>Name:</label>
+              <label className="form-label fw-semibold">Name</label>
               <input
                 type="text"
                 {...formik.getFieldProps("name")}
-                className="form-control"
-                style={{ height: "4vh" }}
+                className={`form-control ${formik.touched.name && formik.errors.name ? "is-invalid" : ""}`}
+                placeholder="Your full name"
               />
               {formik.touched.name && formik.errors.name && (
-                <div className="text-danger">{formik.errors.name}</div>
+                <div className="invalid-feedback d-block">{formik.errors.name}</div>
               )}
             </div>
 
-            {/* Age Input */}
+            {/* Age */}
             <div className="mb-3">
-              <label>Age:</label>
+              <label className="form-label fw-semibold">Age</label>
               <input
                 type="number"
                 {...formik.getFieldProps("age")}
-                className="form-control"
-                style={{ height: "4vh" }}
+                className={`form-control ${formik.touched.age && formik.errors.age ? "is-invalid" : ""}`}
+                placeholder="Your age"
               />
               {formik.touched.age && formik.errors.age && (
-                <div className="text-danger">{formik.errors.age}</div>
+                <div className="invalid-feedback d-block">{formik.errors.age}</div>
               )}
             </div>
 
-            {/* Gender Input */}
+            {/* Gender */}
             <div className="mb-3">
-              <label>Gender:</label>
+              <label className="form-label fw-semibold">Gender</label>
               <select
                 {...formik.getFieldProps("gender")}
-                className="form-control"
-                style={{ height: "4vh" }}
+                className={`form-control ${formik.touched.gender && formik.errors.gender ? "is-invalid" : ""}`}
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -116,68 +103,85 @@ function Register() {
                 <option value="Other">Other</option>
               </select>
               {formik.touched.gender && formik.errors.gender && (
-                <div className="text-danger">{formik.errors.gender}</div>
+                <div className="invalid-feedback d-block">{formik.errors.gender}</div>
               )}
             </div>
 
-            {/* Weight Input */}
+            {/* Weight */}
             <div className="mb-3">
-              <label>Weight (kg):</label>
+              <label className="form-label fw-semibold">Weight (kg)</label>
               <input
                 type="number"
                 {...formik.getFieldProps("weight")}
-                className="form-control"
-                style={{ height: "4vh" }}
+                className={`form-control ${formik.touched.weight && formik.errors.weight ? "is-invalid" : ""}`}
+                placeholder="Your weight in kg"
               />
               {formik.touched.weight && formik.errors.weight && (
-                <div className="text-danger">{formik.errors.weight}</div>
+                <div className="invalid-feedback d-block">{formik.errors.weight}</div>
               )}
             </div>
 
-            {/* Email Input */}
+            {/* Email with icon */}
             <div className="mb-3">
-              <label>Email:</label>
-              <input
-                type="email"
-                {...formik.getFieldProps("email")}
-                className="form-control"
-                style={{ height: "4vh" }}
-              />
+              <label className="form-label fw-semibold">Email</label>
+              <div className="input-group">
+                <span className="input-group-text bg-light">
+                  <i className="fas fa-envelope"></i>
+                </span>
+                <input
+                  type="email"
+                  {...formik.getFieldProps("email")}
+                  className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+                  placeholder="Enter your email"
+                />
+              </div>
               {formik.touched.email && formik.errors.email && (
-                <div className="text-danger">{formik.errors.email}</div>
+                <div className="invalid-feedback d-block">{formik.errors.email}</div>
               )}
             </div>
 
-            {/* Password Input */}
+            {/* Password with eye icon */}
             <div className="mb-3">
-              <label>Password:</label>
-              <input
-                type="password"
-                {...formik.getFieldProps("password")}
-                className="form-control"
-                style={{ height: "4vh" }}
-              />
+              <label className="form-label fw-semibold">Password</label>
+              <div className="input-group">
+                <span className="input-group-text bg-light">
+                  <i className="fas fa-lock"></i>
+                </span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...formik.getFieldProps("password")}
+                  className={`form-control ${formik.touched.password && formik.errors.password ? "is-invalid" : ""}`}
+                  placeholder="Create a password"
+                />
+                <span className="input-group-text bg-light" onClick={togglePassword} style={{ cursor: "pointer" }}>
+                  <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                </span>
+              </div>
               {formik.touched.password && formik.errors.password && (
-                <div className="text-danger">{formik.errors.password}</div>
+                <div className="invalid-feedback d-block">{formik.errors.password}</div>
               )}
             </div>
 
-            <div className="mb-2 w-100">
-              <button
-                type="submit"
-                className="btn btn-light w-100"
-                style={{ backgroundColor: "#076cea" }}
-              >
-                Register
+            {/* Submit */}
+            <div className="d-grid mt-4">
+              <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Registering...
+                  </>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
 
-          {/* Link to Login Page */}
-          <div className="mt-2 text-center">
-            <p>Already have an account?</p>
-            <Link to="/login" style={{ textDecoration: "none", color: "#076cea" }}>
-              <strong>Login here</strong>
+          {/* Login link */}
+          <div className="text-center mt-4">
+            <p className="mb-0">Already have an account?</p>
+            <Link to="/login" className="text-decoration-none text-primary fw-semibold">
+              Login here
             </Link>
           </div>
         </div>

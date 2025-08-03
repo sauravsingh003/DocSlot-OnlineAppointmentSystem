@@ -1,57 +1,61 @@
-import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { FaCalendarAlt, FaFileMedical } from "react-icons/fa";  
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaCalendarAlt } from "react-icons/fa";
 import DoctorNavbar from "./DoctorNavbar";
 import "./Styles.css";
 
 function Doctor({ children }) {
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-      useEffect(() => {
-        if (!sessionStorage.getItem("userName")) {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "DOCTOR") {
-          navigate("/doctor");
-        } else if (sessionStorage.getItem("userRole") === "PATIENT") {
-          navigate("/");
-        } else if (sessionStorage.getItem("userRole") === "ADMIN") {
-          navigate("/admin");
-        }
-        else if (sessionStorage.getItem("userRole") === "RECEPTIONIST") {
-          navigate("/receiptionist");
-        }
-      }, [navigate]);
+  useEffect(() => {
+    const role = sessionStorage.getItem("userRole");
+    if (!sessionStorage.getItem("userName")) {
+      navigate("/");
+    } else if (role === "PATIENT") {
+      navigate("/");
+    } else if (role === "ADMIN") {
+      navigate("/admin");
+    } else if (role === "RECEPTIONIST") {
+      navigate("/receiptionist");
+    }
+  }, [navigate]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div>
       <DoctorNavbar />
       <div className="layout-container">
-        <div
-          className="sidebar"
-          style={{
-            border: "2px solid black",
-            display: "flex",
-            backgroundColor: "#076cea",
-          }}
+        {/* Toggle Button for Small Screens */}
+        <button
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
         >
-          <div className="sidebar-header">
-            <h3>Doctor</h3>
-          </div>
+          ☰
+        </button>
+
+        {/* Sidebar */}
+        <aside className={`sidebar glass-sidebar ${isSidebarOpen ? "open" : ""}`}>
+          <div className="sidebar-header">Doctor</div>
           <nav className="sidebar-nav">
             <NavLink
               to="/doctor/viewAppointments"
               className={({ isActive }) =>
                 isActive ? "sidebar-link active" : "sidebar-link"
               }
+              onClick={() => setIsSidebarOpen(false)}
             >
-              <FaCalendarAlt className="icon" /> View Appointments
+              <FaCalendarAlt className="icon" />
+              View Appointments
             </NavLink>
-            
           </nav>
-        </div>
+        </aside>
 
-        <div className="main-content">{children}</div>
+        <main className="main-content">{children}</main>
       </div>
     </div>
   );
